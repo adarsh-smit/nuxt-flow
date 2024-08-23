@@ -5,6 +5,21 @@ import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 
 
+// Define props to receive data from the parent
+const props = defineProps({
+  message: Array,
+  updateChild: Function
+});
+
+// Define emit to create custom events
+const emit = defineEmits(['notify-parent']);
+
+
+// Call the parent's update method (if necessary)
+const callParentMethod = () => {
+  props.updateChild([]);
+};
+
 const initialNodes = ref([
   {
     id: '1',
@@ -13,7 +28,7 @@ const initialNodes = ref([
     label: "Random Node1"
   }
 ])
-const { addNodes } = useVueFlow()
+const { addNodes, toObject, fromObject } = useVueFlow()
 
 function generateRandomNode() {
   return {
@@ -47,6 +62,34 @@ const showSlide = () => {
   }
 };
 
+//save load
+const saveDiagram = (loc) => {
+  const saveData = toObject()
+  console.log(saveData);
+  // Store the diagram data in localStorage or any other storage solution
+  localStorage.setItem(loc, JSON.stringify(saveData));
+};
+
+
+// Function to load the diagram state
+const loadDiagram = (loc) => {
+  const flow = JSON.parse(localStorage.getItem(loc))
+
+  if (flow) {
+    fromObject(flow)
+  }
+};
+
+
+watch(() => props.message, (val) => {
+  if(val.length>0) {
+    if (val[0]=="save") {
+      saveDiagram(val[1])
+    } else if (val[0]=="load") {
+      loadDiagram(val[1])
+    }
+  }
+}, {deep: true})
 </script>
 
 <template>

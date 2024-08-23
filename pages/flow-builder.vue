@@ -1,29 +1,45 @@
 <template>
   <div class="container">
     <ClientOnly>
-    <div class="sidebar">Sidebar (25%)
-      <div v-for="row in rows" :key="row" class="row">
-        <div v-for="box in boxesPerRow" :key="box" class="box">
-          <p>{{ text[row - 1][box - 1] }}</p>
+      <div class="sidebar">Sidebar (25%)
+        <div v-for="row in rows" :key="row" class="row">
+          <div v-for="box in boxesPerRow" :key="box" class="box">
+            <button  @click="handle(text[row - 1][box - 1])">{{ text[row - 1][box - 1] }}</button>
+          </div>
         </div>
       </div>
-    </div>
       <div class="content">Content (75%)
-        <Flow />
+        <Flow :message="childMessage" :updateChild="updateChildMessage"/>
       </div>
       <button class="floating-button" @click="handleClick">Complete Journey</button>
     </ClientOnly>
-    </div>
+  </div>
 </template>
 
 <script setup>
+
 const rows = [1, 2, 3]; // Number of rows
 const boxesPerRow = [1, 2, 3]; // Number of boxes per row
-const text = [["add trigger", "add node", "c"], ["a", "b", "c"], ["a", "b", "c"]]
+const text = [["wip", "wip", "wip"], ["save a", "save b", "save c"], ["load a", "load b", "load c"]]
+const childMessage = ref([]);
 
 const handleClick = () => {
   alert('Floating button clicked!');
 };
+
+// Define the method to trigger update in the child
+const updateChildMessage = (newMessage) => {
+  childMessage.value = newMessage;
+};
+
+const handle = (e) => {
+  let t = e.split(" ");
+  updateChildMessage(t)
+
+}
+
+
+
 </script>
 
 <style scoped>
@@ -56,12 +72,11 @@ const handleClick = () => {
   padding: 10px;
   box-sizing: border-box;
   text-align: center;
-  cursor: pointer;
 }
 
-.box:hover {
+/* .box:hover {
   background-color: #0056b3;
-}
+} */
 
 .floating-button {
   position: fixed;
@@ -84,7 +99,10 @@ const handleClick = () => {
   font-size: 16px;
 }
 
-.floating-button:hover {
+.floating-button:hover, button:hover {
   background-color: #0056b3;
+}
+button {
+  cursor: pointer;
 }
 </style>
