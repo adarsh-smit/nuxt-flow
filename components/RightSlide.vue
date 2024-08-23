@@ -1,8 +1,25 @@
 <template>
-  <div :class="['slide', { 'slide-open': isOpen }]">
-    <button class="close-btn" @click="closeSlide">Close</button>
+  <div :v-show="isOpen" :class="['slide', { 'slide-open': isOpen }]">
+    <!-- <button class="close-btn" @click="closeSlide">Close</button> -->
     <div class="content">
-      {{ nodeData }}
+      {{ nodeData?.data }}
+      <div class="input-group">
+        <label for="input1">Label 1:</label>
+        <input id="input1" type="text" v-model="input1" />
+      </div>
+      <div class="input-group">
+        <label for="input2">Label 2:</label>
+        <input id="input2" type="text" v-model="input2" />
+      </div>
+      <div class="input-group">
+        <label for="input3">Label 3:</label>
+        <input id="input3" type="text" v-model="input3" />
+      </div>
+      <div class="actions">
+        <button class="action-btn save" @click="save">Save</button>
+        <button class="action-btn cancel" @click="closeSlide">Cancel</button>
+        <button class="action-btn delete" @click="deleteItem">Delete</button>
+      </div>
       <slot></slot>
     </div>
   </div>
@@ -13,15 +30,47 @@ import { ref } from 'vue';
 
 const isOpen = ref(false);
 
+const nodeData = useState("nodeClickData")
+let input1 = undefined;
+let input2 = undefined;
+let input3 = undefined;
+
+
+// if (nodeData.value)
+//   nodeData?.value?.data = customData
+
 const openSlide = () => {
+  // console.log("openslide", nodeData.value?.data?.l1);
   isOpen.value = true;
+  updateValues()
 };
 
 const closeSlide = () => {
   isOpen.value = false;
 };
 
-const nodeData = useState("nodeClickData")
+const save = () => {
+  // Add save logic here
+  console.log('Save button clicked');
+  nodeData.value.data = { l1: input1, l2: input2, l3: input3 }
+};
+
+const deleteItem = () => {
+  // Add delete logic here
+  console.log('Delete button clicked');
+};
+
+const updateValues = () => {
+  input1 = nodeData.value?.data?.l1
+  input2 = nodeData.value?.data?.l2
+  input3 = nodeData.value?.data?.l3
+} 
+
+const nodeDataData = computed(() => nodeData.value?.data);
+watch(nodeDataData, (newValue, oldValue) => {
+  console.log('Value changed from', oldValue, 'to', newValue);
+  updateValues()
+}, {deep: true});
 
 defineExpose({
   openSlide
@@ -31,8 +80,10 @@ defineExpose({
 <style scoped>
 .slide {
   position: fixed;
+  z-index: 1000;
   top: 0;
-  right: -30vw; /* Initially hidden outside the viewport */
+  right: -30vw;
+  /* Initially hidden outside the viewport */
   width: 30vw;
   height: 100vh;
   background-color: #333;
@@ -43,7 +94,8 @@ defineExpose({
 }
 
 .slide-open {
-  right: 0; /* Slide in */
+  right: 0;
+  /* Slide in */
 }
 
 .close-btn {
@@ -60,5 +112,66 @@ defineExpose({
 
 .content {
   padding: 20px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.actions {
+  margin-top: auto;
+  /* Push buttons to the bottom */
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.save {
+  background-color: #4caf50;
+  /* Green */
+}
+
+.save:hover {
+  background-color: #45a049;
+}
+
+.cancel {
+  background-color: #f0ad4e;
+  /* Orange */
+}
+
+.cancel:hover {
+  background-color: #ec971f;
+}
+
+.delete {
+  background-color: #d9534f;
+  /* Red */
+}
+
+.delete:hover {
+  background-color: #c9302c;
 }
 </style>

@@ -9,14 +9,15 @@ const initialNodes = ref([
   {
     id: '1',
     position: { x: 50, y: 50 },
-    data: { label: 'Node 1' },
+    data: {},
+    label: "Random Node1"
   }
 ])
 const { addNodes } = useVueFlow()
 
 function generateRandomNode() {
   return {
-    id: Math.random().toString(),
+    id: Math.random() * 1000,
     position: { x: Math.random() * 500, y: Math.random() * 500 },
     label: 'Random Node',
   }
@@ -34,7 +35,7 @@ function onAddNodes() {
 
 function handleNodeClick(e) {
   showSlide()
-  useState("nodeClickData", () => e)
+  useState("nodeClickData").value = e.node
   // console.log("node clicked:", e)
 }
 
@@ -49,15 +50,15 @@ const showSlide = () => {
 </script>
 
 <template>
-    <RightSlide ref="rightSlide"></RightSlide>
-    <VueFlow :nodes="initialNodes" @node-click="handleNodeClick">
-      <Background  variant="dots" />
-      <Controls />
-      <Panel>
-        <button type="button" @click="onAddNode">Add a node</button>
-        <button type="button" @click="onAddNodes">Add multiple nodes</button>
-      </Panel>
-      
-    </VueFlow>
+  <RightSlide ref="rightSlide"></RightSlide>
+  <VueFlow :nodes="initialNodes" @node-click="handleNodeClick">
+    <Background variant="dots" />
+    <Controls />
+    <Panel>
+      <button type="button" @click="onAddNode">Add a node</button>
+      <!-- <button type="button" @click="onAddNodes">Add multiple nodes</button> -->
+    </Panel>
+
+  </VueFlow>
 
 </template>
