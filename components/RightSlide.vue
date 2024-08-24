@@ -56,14 +56,12 @@ const closeSlide = () => {
 
 const save = () => {
   // Add save logic here
-  console.log('Save button clicked');
   isOpen.value = false;
   nodeData.value.data = { label: name, l1: input1, l2: input2, l3: input3 }
 };
 
 const deleteItem = () => {
   // Add delete logic here
-  console.log('Delete button clicked');
 };
 
 const updateValues = () => {
@@ -75,7 +73,7 @@ const updateValues = () => {
 
 const nodeDataData = computed(() => nodeData.value?.data);
 watch(nodeDataData, (newValue, oldValue) => {
-  console.log('Value changed from', oldValue, 'to', newValue);
+  // console.log('Value changed from', oldValue, 'to', newValue);
   updateValues()
 }, {deep: true});
 

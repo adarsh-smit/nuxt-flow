@@ -50,8 +50,9 @@ function generateRandomNode() {
 }
 
 function handleNodeClick(e) {
+  console.log(e);
   showSlide()
-  useState("nodeClickData").value = e.node
+  useState("nodeClickData").value = e.node === undefined ? e.edge: e.node
   // console.log("node clicked:", e)
 }
 
@@ -103,10 +104,15 @@ watch(() => props.message, (val) => {
     </Panel>
   </VueFlow> -->
   <div class="dnd-flow" @drop="onDrop">
-    <VueFlow :nodes="nodes" :edges="edges" @dragover="onDragOver" @dragleave="onDragLeave" @node-click="handleNodeClick" fit-view-on-init>
+    <VueFlow :nodes="nodes" :edges="edges" @dragover="onDragOver" @dragleave="onDragLeave"
+    @node-click="handleNodeClick"
+    @edge-click="handleNodeClick"
+    fit-view-on-init 
+    :connection-radius="30" 
+    auto-connect :default-edge-options="{ type: 'smoothstep', animated: true }">
       <DropzoneBackground
         :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+          backgroundColor: isDragOver ? '#2b465e' : 'transparent',
           transition: 'background-color 0.2s ease',
         }"
       >
@@ -121,57 +127,5 @@ watch(() => props.message, (val) => {
 </template>
 
 <style lang="css" scoped>
-.dnd-flow {
-  flex-direction: column;
-  display: flex;
-  height: 100%
-}
 
-.dnd-flow aside {
-  color: #fff;
-  font-weight: 700;
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-  background: #10b981bf;
-  -webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, .3);
-  box-shadow: 0 5px 10px #0000004d
-}
-
-.dnd-flow aside .nodes>* {
-  margin-bottom: 10px;
-  cursor: grab;
-  font-weight: 500;
-  -webkit-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, .25);
-  box-shadow: 5px 5px 10px 2px #00000040
-}
-
-.dnd-flow aside .description {
-  margin-bottom: 10px
-}
-
-.dnd-flow .vue-flow-wrapper {
-  flex-grow: 1;
-  height: 100%
-}
-
-@media screen and (min-width: 640px) {
-  .dnd-flow {
-    flex-direction: row
-  }
-
-  .dnd-flow aside {
-    min-width: 25%
-  }
-
-
-}
-
-@media screen and (max-width: 639px) {
-  .dnd-flow aside .nodes {
-    display: flex;
-    flex-direction: row;
-    gap: 5px
-  }
-}
 </style>
