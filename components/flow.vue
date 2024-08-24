@@ -39,7 +39,7 @@ const initialNodes = ref([
     label: "Random Node1"
   }
 ])
-const { addNodes, toObject, fromObject } = useVueFlow()
+const { addNodes, toObject, fromObject, removeNodes, removeEdges } = useVueFlow()
 
 function generateRandomNode() {
   return {
@@ -50,9 +50,10 @@ function generateRandomNode() {
 }
 
 function handleNodeClick(e) {
-  console.log(e);
+  // console.log(e);
+
   showSlide()
-  useState("nodeClickData").value = e.node === undefined ? e.edge: e.node
+  useState("nodeClickData").value = e.node === undefined ? {modelType:"edge", ...e.edge}: {modelType:"node", ...e.node}
   // console.log("node clicked:", e)
 }
 
@@ -63,6 +64,16 @@ const showSlide = () => {
     rightSlide.value.openSlide();
   }
 };
+
+
+//delete nodes and edges
+const nodeDelete = (e) => {
+  removeNodes(e, true, false)
+}
+const edgeDelete = (e) => {
+  removeEdges(e)
+}
+
 
 //save load
 const saveDiagram = (loc) => {
@@ -95,7 +106,7 @@ watch(() => props.message, (val) => {
 </script>
 
 <template>
-  <RightSlide ref="rightSlide"></RightSlide>
+  <RightSlide ref="rightSlide" @nodeDelete="nodeDelete" @edgeDelete="edgeDelete"></RightSlide>
   <!-- <VueFlow :nodes="initialNodes" @node-click="handleNodeClick">
     <Background variant="dots" />
     <Controls />
