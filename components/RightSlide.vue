@@ -37,6 +37,7 @@ const emit = defineEmits();
 const isOpen = ref(false);
 
 const nodeData = useState("nodeClickData")
+const selectedType = useState("selectedType")
 let name = undefined;
 let input1 = undefined;
 let input2 = undefined;
@@ -58,15 +59,17 @@ const closeSlide = () => {
 
 const save = () => {
   // Add save logic here
-  isOpen.value = false;
+  console.log({ label: name, l1: input1, l2: input2, l3: input3 }, nodeData.value.data);
+  
   nodeData.value.data = { label: name, l1: input1, l2: input2, l3: input3 }
+  isOpen.value = false;
 };
 
 const deleteItem = () => {
   // Add delete logic here
   // console.log(nodeData.value.modelType+"Delete", nodeData.value);
   isOpen.value = false;
-  emit(nodeData.value.modelType+"Delete", nodeData.value)
+  emit(selectedType.value+"Delete", nodeData.value)
 };
 
 const updateValues = () => {

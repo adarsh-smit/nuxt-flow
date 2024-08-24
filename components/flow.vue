@@ -53,7 +53,11 @@ function handleNodeClick(e) {
   // console.log(e);
 
   showSlide()
-  useState("nodeClickData").value = e.node === undefined ? {modelType:"edge", ...e.edge}: {modelType:"node", ...e.node}
+  // useState("nodeClickData").value = e.node === undefined ? { modelType: "edge", ...e.edge } : { modelType: "node", ...e.node }
+  useState("selectedType").value = e.node === undefined ? "edge" : "node"
+  useState("nodeClickData").value = e.node === undefined ? e.edge : e.node
+  // console.log(useState("nodeClickData").value);
+
   // console.log("node clicked:", e)
 }
 
@@ -115,18 +119,13 @@ watch(() => props.message, (val) => {
     </Panel>
   </VueFlow> -->
   <div class="dnd-flow" @drop="onDrop">
-    <VueFlow :nodes="nodes" :edges="edges" @dragover="onDragOver" @dragleave="onDragLeave"
-    @node-click="handleNodeClick"
-    @edge-click="handleNodeClick"
-    fit-view-on-init 
-    :connection-radius="30" 
-    auto-connect :default-edge-options="{ type: 'smoothstep', animated: true }">
-      <DropzoneBackground
-        :style="{
-          backgroundColor: isDragOver ? '#2b465e' : 'transparent',
-          transition: 'background-color 0.2s ease',
-        }"
-      >
+    <VueFlow :nodes="nodes" :edges="edges" @dragover="onDragOver" @dragleave="onDragLeave" @node-click="handleNodeClick"
+      @edge-click="handleNodeClick" fit-view-on-init :connection-radius="30" auto-connect
+      :default-edge-options="{ type: 'smoothstep', animated: true }">
+      <DropzoneBackground :style="{
+    backgroundColor: isDragOver ? '#2b465e' : 'transparent',
+    transition: 'background-color 0.2s ease',
+  }">
         <p v-if="isDragOver">Drop here</p>
       </DropzoneBackground>
       <Controls />
@@ -137,6 +136,4 @@ watch(() => props.message, (val) => {
 
 </template>
 
-<style lang="css" scoped>
-
-</style>
+<style lang="css" scoped></style>
