@@ -32,6 +32,8 @@
 <script setup>
 import { ref } from 'vue';
 
+const emit = defineEmits();
+
 const isOpen = ref(false);
 
 const nodeData = useState("nodeClickData")
@@ -62,6 +64,9 @@ const save = () => {
 
 const deleteItem = () => {
   // Add delete logic here
+  // console.log(nodeData.value.modelType+"Delete", nodeData.value);
+  isOpen.value = false;
+  emit(nodeData.value.modelType+"Delete", nodeData.value)
 };
 
 const updateValues = () => {
