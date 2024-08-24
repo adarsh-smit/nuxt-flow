@@ -4,6 +4,10 @@
     <div class="content">
       {{ nodeData?.data }}
       <div class="input-group">
+        <label for="input1">Name:</label>
+        <input id="name" type="text" v-model="name" />
+      </div>
+      <div class="input-group">
         <label for="input1">Label 1:</label>
         <input id="input1" type="text" v-model="input1" />
       </div>
@@ -31,6 +35,7 @@ import { ref } from 'vue';
 const isOpen = ref(false);
 
 const nodeData = useState("nodeClickData")
+let name = undefined;
 let input1 = undefined;
 let input2 = undefined;
 let input3 = undefined;
@@ -52,7 +57,8 @@ const closeSlide = () => {
 const save = () => {
   // Add save logic here
   console.log('Save button clicked');
-  nodeData.value.data = { l1: input1, l2: input2, l3: input3 }
+  isOpen.value = false;
+  nodeData.value.data = { label: name, l1: input1, l2: input2, l3: input3 }
 };
 
 const deleteItem = () => {
@@ -61,6 +67,7 @@ const deleteItem = () => {
 };
 
 const updateValues = () => {
+  name = nodeData.value?.data?.label
   input1 = nodeData.value?.data?.l1
   input2 = nodeData.value?.data?.l2
   input3 = nodeData.value?.data?.l3
